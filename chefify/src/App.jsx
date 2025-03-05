@@ -1,19 +1,18 @@
-import React from "react"
-import Header from "./components/header"
-import Footer from "./components/footer"
-import Content from "./components/content"
-
-function App() {
-
+// import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+const App = () => {
   return (
-    <>
-      <div>
-        <Header/>
-        <Content/>
-        <Footer/>
-      </div>
-    </>
-  )
-}
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element = {<Home/>}/>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+};
 
-export default App
+export default App;
