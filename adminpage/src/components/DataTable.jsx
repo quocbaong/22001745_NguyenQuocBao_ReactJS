@@ -79,7 +79,7 @@ const DataTable = ({ data, loading }) => {
                         <span>{order.customerName || 'Unknown Customer'}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3">{order.value}</td>
+                    <td className="px-4 py-3">{order.company}</td>
                     <td className="px-4 py-3">${order.orderValue}</td>
                     <td className="px-4 py-3">{new Date(order.oderDate * 1000).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
