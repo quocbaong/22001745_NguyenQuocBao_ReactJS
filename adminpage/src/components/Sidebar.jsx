@@ -1,41 +1,48 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import img from '../assets/3_Data/Selection_Sidebar.jpg'
 
-function Sidebar() {
+const Sidebar = () => {
   return (
-    <div className="bg-white shadow-md flex flex-col p-6 w-64 min-h-screen">
-      <div className="text-2xl font-bold text-pink-500 mb-8 flex items-center space-x-2">
-        <span className="bg-gradient-to-r from-pink-500 to-blue-500 w-3 h-3 rounded-full"></span>
-        <span>Logo</span>
+    <div className="w-56 bg-white border-r border-gray-200 flex flex-col h-screen">
+      <div className="px-5 py-4">
+        <div className="text-pink-500 font-bold text-xl flex items-center gap-2">
+          <span className="text-xl">🎨</span> Logo
+        </div>
       </div>
       
-      <nav className="space-y-4">
-        <a href="#" className="flex items-center space-x-2 text-gray-600 hover:bg-pink-500 hover:text-white p-2 rounded-md">
-          <span>📊</span>
-          <span>Dashboard</span>
-        </a>
-        <a href="#" className="flex items-center space-x-2 text-gray-600 hover:bg-pink-500 hover:text-white p-2 rounded-md">
-          <span>📁</span>
-          <span>Projects</span>
-        </a>
-        <a href="#" className="flex items-center space-x-2 text-gray-600 hover:bg-pink-500 hover:text-white p-2 rounded-md">
-          <span>👥</span>
-          <span>Teams</span>
-        </a>
-        <a href="#" className="flex items-center space-x-2 text-gray-600 hover:bg-pink-500 hover:text-white p-2 rounded-md">
-          <span>📊</span>
-          <span>Analytics</span>
-        </a>
-        <a href="#" className="flex items-center space-x-2 text-gray-600 hover:bg-pink-500 hover:text-white p-2 rounded-md">
-          <span>💬</span>
-          <span>Messages</span>
-        </a>
-        <a href="#" className="flex items-center space-x-2 text-gray-600 hover:bg-pink-500 hover:text-white p-2 rounded-md">
-          <span>🔗</span>
-          <span>Integrations</span>
-        </a>
+      <nav className="flex-1">
+        <Link to="/" className="flex items-center px-5 py-3 text-white bg-pink-500 mx-2 rounded">
+          <span className="mr-3">📊</span> Dashboard
+        </Link>
+        <Link to="/projects" className="flex items-center px-5 py-3 text-gray-600 hover:bg-gray-100 mx-2 rounded">
+          <span className="mr-3">📁</span> Projects
+        </Link>
+        <Link to="/teams" className="flex items-center px-5 py-3 text-gray-600 hover:bg-gray-100 mx-2 rounded">
+          <span className="mr-3">👥</span> Teams
+        </Link>
+        <Link to="/analytics" className="flex items-center px-5 py-3 text-gray-600 hover:bg-gray-100 mx-2 rounded">
+          <span className="mr-3">📈</span> Analytics
+        </Link>
+        <Link to="/messages" className="flex items-center px-5 py-3 text-gray-600 hover:bg-gray-100 mx-2 rounded">
+          <span className="mr-3">✉️</span> Messages
+        </Link>
+        <Link to="/integrations" className="flex items-center px-5 py-3 text-gray-600 hover:bg-gray-100 mx-2 rounded">
+          <span className="mr-3">🔄</span> Integrations
+        </Link>
       </nav>
+      
+      <div className="p-4 m-4 bg-blue-50 rounded-lg text-center mt-auto">
+        <div className="mb-2">
+          <img src={img} alt="" />
+        </div>
+        <div className="font-bold mb-2">v2.0 is available</div>
+        <button className="w-full py-2 px-4 bg-white border border-gray-200 rounded hover:bg-gray-50">
+          Try now
+        </button>
+      </div>
     </div>
   );
-}
+};
 
 export default Sidebar;

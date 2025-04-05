@@ -1,40 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-function Overview() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetch('https://67ec9394aa794fb3222e224b.mockapi.io/report')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
-  const totalTurnover = 679;
-  const totalProfit = 237.65;
-  const totalNewCustomers = 15;
-
+const Overview = ({ stats }) => {
   return (
-    <div className="mb-6">
-      <h2 className="text-lg font-bold flex items-center space-x-2">
-        <span className="text-pink-500">▍</span> <span>Overview</span>
-      </h2>
-      <div className="grid grid-cols-3 gap-6 mt-4 text-black">
-        <div className="p-6 rounded-lg shadow-md bg-red-200">
-          <h3 className="text-gray-500">TURNOVER</h3>
-          <p className="text-3xl font-bold">${totalTurnover}</p>
+    <div className="grid grid-cols-3 gap-6">
+      <div className="bg-red-50 p-6 rounded-lg shadow-sm flex justify-between">
+        <div>
+          <h3 className="text-gray-600 mb-3">Turnover</h3>
+          <div className="text-3xl font-bold mb-2">${stats.turnover.value.toLocaleString()}</div>
+          <div className="text-green-600 text-sm">
+            ↑ {stats.turnover.change}% period of change
+          </div>
         </div>
-        <div className="p-6 rounded-lg shadow-md bg-green-200">
-          <h3 className="text-gray-500">PROFIT</h3>
-          <p className="text-3xl font-bold">${totalProfit}</p>
+        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+          🛒
         </div>
-        <div className="p-6 rounded-lg shadow-md bg-blue-200">
-          <h3 className="text-gray-500">NEW CUSTOMERS</h3>
-          <p className="text-3xl font-bold">{totalNewCustomers}</p>
+      </div>
+      
+      <div className="bg-blue-50 p-6 rounded-lg shadow-sm flex justify-between">
+        <div>
+          <h3 className="text-gray-600 mb-3">Profit</h3>
+          <div className="text-3xl font-bold mb-2">${stats.profit.value.toLocaleString()}</div>
+          <div className="text-green-600 text-sm">
+            ↑ {stats.profit.change}% period of change
+          </div>
+        </div>
+        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+          💲
+        </div>
+      </div>
+      
+      <div className="bg-green-50 p-6 rounded-lg shadow-sm flex justify-between">
+        <div>
+          <h3 className="text-gray-600 mb-3">New customer</h3>
+          <div className="text-3xl font-bold mb-2">{stats.newCustomers.value}</div>
+          <div className="text-green-600 text-sm">
+            ↑ {stats.newCustomers.change}% period of change
+          </div>
+        </div>
+        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+          ⚙️
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Overview;
