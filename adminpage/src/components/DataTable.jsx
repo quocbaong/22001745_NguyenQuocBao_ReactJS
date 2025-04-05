@@ -2,7 +2,44 @@ import React, { useState } from 'react';
 import Modal from './Modal';
 
 const DataTable = ({ data, loading }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   
+  const rowsPerPage = 10;
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+  
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
+  const openModal = (order) => {
+    setSelectedOrder(order);
+    setModalOpen(true);
+  };
+  
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+  
+  const handleSave = (updatedOrder) => {
+    console.log('Saving updated order:', updatedOrder);
+    closeModal();
+  };
+  
+  const getStatusClass = (status) => {
+    switch(status) {
+      case 'New':
+        return 'bg-blue-100 text-blue-600';
+      case 'In-progress':
+        return 'bg-yellow-100 text-yellow-600';
+      case 'Completed':
+        return 'bg-green-100 text-green-600';
+      default:
+        return 'bg-gray-100';
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
       {loading ? (
@@ -33,14 +70,18 @@ const DataTable = ({ data, loading }) => {
                     <td className="px-4 py-3">
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
-                          <img src={order.customer.avatar} alt={order.customer.name} className="w-full h-full object-cover" />
+                          <img 
+                            src={order.avatar || '/path/to/default-avatar.jpg'} 
+                            alt={order.customerName || 'No Name'} 
+                            className="w-full h-full object-cover" 
+                          />
                         </div>
-                        <span>{order.customer.name}</span>
+                        <span>{order.customerName || 'Unknown Customer'}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3">{order.company}</td>
-                    <td className="px-4 py-3">${order.value}</td>
-                    <td className="px-4 py-3">{order.date}</td>
+                    <td className="px-4 py-3">{order.value}</td>
+                    <td className="px-4 py-3">${order.orderValue}</td>
+                    <td className="px-4 py-3">{new Date(order.oderDate * 1000).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded-md text-xs font-medium ${getStatusClass(order.status)}`}>
                         {order.status}

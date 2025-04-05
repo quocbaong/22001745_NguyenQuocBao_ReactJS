@@ -4,9 +4,9 @@ import DataTable from "../components/DataTable";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
-    turnover: { value: 92405, change: 5.33 },
-    profit: { value: 32218, change: 5.33 },
-    newCustomers: { value: 298, change: 6.84 },
+    turnover: { value: 0, change: 5.33 },
+    profit: { value: 0, change: 5.33 },
+    newCustomers: { value: 0, change: 6.84 },
   });
 
   const [orders, setOrders] = useState([]);
@@ -25,6 +25,20 @@ const Dashboard = () => {
 
         const data = await response.json();
         setOrders(data);
+
+        const totalTurnover = data.reduce(
+          (sum, item) => sum + (parseFloat(item.orderValue) || 0),
+          0
+        );
+        const profit = totalTurnover * 0.35; 
+        const newCustomers = data.length;
+
+        setStats({
+          turnover: { value: totalTurnover, change: 5.33 },
+          profit: { value: profit, change: 3.21 },
+          newCustomers: { value: newCustomers, change: 6.84 },
+        });
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);

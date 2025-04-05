@@ -1,7 +1,40 @@
 import React, { useState, useEffect } from 'react';
 
 const Modal = ({ isOpen, onClose, order, onSave }) => {
-  
+    const [formData, setFormData] = useState({});
+    
+    useEffect(() => {
+      if (order) {
+        setFormData({
+          ...order,
+          customerName: order.customer?.name || ''
+        });
+      }
+    }, [order]);
+    
+    if (!isOpen) return null;
+    
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    };
+    
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      
+      const updatedOrder = {
+        ...formData,
+        customer: {
+          ...formData.customer,
+          name: formData.customerName
+        }
+      };
+      
+      onSave(updatedOrder);
+    };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg w-full max-w-md">
