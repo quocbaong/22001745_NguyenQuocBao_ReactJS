@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Overview from "../components/Overview";
 import DataTable from "../components/DataTable";
+import Modal from "../components/Modal";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -11,6 +12,80 @@ const Dashboard = () => {
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const openAddModal = () => {
+    setSelectedOrder(null); 
+    setModalOpen(true);
+  };
+
+  const openEditModal = (order) => {
+    setSelectedOrder(order); 
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleSave = async (newOrder) => {
+    try {
+      let response;
+      if (newOrder.id) {
+        response = await fetch(
+          `https://67ec9394aa794fb3222e224b.mockapi.io/report/${newOrder.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newOrder),
+          }
+        );
+      } else {
+        response = await fetch(
+          "https://67ec9394aa794fb3222e224b.mockapi.io/report",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newOrder),
+          }
+        );
+      }
+
+      if (!response.ok) throw new Error("Failed to save order");
+
+      const savedOrder = await response.json();
+
+      const updatedOrders = newOrder.id
+        ? orders.map((order) =>
+            order.id === savedOrder.id ? { ...order, ...savedOrder } : order
+          )
+        : [...orders, savedOrder];
+
+      setOrders(updatedOrders);
+
+      const totalTurnover = updatedOrders.reduce(
+        (sum, item) => sum + (parseFloat(item.orderValue) || 0),
+        0
+      );
+      const totalProfit = totalTurnover * 0.35;
+
+      setStats({
+        turnover: { value: totalTurnover, change: 5.33 },
+        profit: { value: totalProfit, change: 3.21 },
+        newCustomers: { value: updatedOrders.filter(order => order.status === "New").length, change: 6.84 },
+      });
+
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Error saving order:", error);
+      alert("Failed to save order");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,13 +105,14 @@ const Dashboard = () => {
           (sum, item) => sum + (parseFloat(item.orderValue) || 0),
           0
         );
-        const profit = totalTurnover * 0.35; 
-        const newCustomers = data.length;
+        const profit = totalTurnover * 0.35;
+
+        const newCustomersCount = data.filter((item) => item.status === "New").length;
 
         setStats({
           turnover: { value: totalTurnover, change: 5.33 },
           profit: { value: profit, change: 3.21 },
-          newCustomers: { value: newCustomers, change: 6.84 },
+          newCustomers: { value: newCustomersCount, change: 6.84 },
         });
 
         setLoading(false);
@@ -46,9 +122,8 @@ const Dashboard = () => {
       }
     };
 
-    fetchData(); 
-
-  }, []); 
+    fetchData();
+  }, []);
 
   return (
     <div className="p-6">
@@ -84,7 +159,10 @@ const Dashboard = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Detailed report</h2>
           <div className="flex gap-2">
-          <button className="flex items-center px-4 py-2 bg-white border border-gray-200 rounded">
+            <button
+              onClick={openAddModal}
+              className="flex items-center px-4 py-2 bg-white border border-gray-200 rounded"
+            >
               <span className="mr-2">➕</span> Add
             </button>
             <button className="flex items-center px-4 py-2 bg-white border border-gray-200 rounded">
@@ -95,8 +173,20 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        <DataTable data={orders} loading={loading} setOrders={setOrders} setStats={setStats}/>
+        <DataTable
+          data={orders}
+          loading={loading}
+          setOrders={setOrders}
+          setStats={setStats}
+          openEditModal={openEditModal}
+        />
       </section>
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        order={selectedOrder}
+        onSave={handleSave}
+      />
     </div>
   );
 };

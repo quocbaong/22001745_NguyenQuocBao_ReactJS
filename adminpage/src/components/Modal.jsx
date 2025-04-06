@@ -10,7 +10,6 @@ const Modal = ({ isOpen, onClose, order, onSave }) => {
 
   useEffect(() => {
     if (order) {
-      console.log("Order data in modal:", order);  
       setFormData({
         customerName: order.customerName || '',  
         company: order.company || '',            
@@ -18,9 +17,9 @@ const Modal = ({ isOpen, onClose, order, onSave }) => {
         status: order.status || 'New',           
       });
     }
-  }, [order]); 
+  }, [order]);
 
-  if (!isOpen) return null;  
+  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,17 +31,12 @@ const Modal = ({ isOpen, onClose, order, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Order Value before submit:", formData.orderValue); 
-    
     const updatedOrder = {
       ...formData,
-      customerName: formData.customerName, 
-      id: order.id,
+      id: order ? order.id : undefined, 
       orderValue: !isNaN(parseFloat(formData.orderValue)) ? parseFloat(formData.orderValue) : 0,
     };
-  
-    console.log("Updated Order: ", updatedOrder); 
-  
+
     onSave(updatedOrder);
   };
 
@@ -50,7 +44,7 @@ const Modal = ({ isOpen, onClose, order, onSave }) => {
     <div className="fixed bg-opacity-30 inset-0 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg w-full max-w-md relative">
         <div className="flex justify-between items-center border-b px-6 py-4">
-          <h2 className="text-xl font-bold">Edit Order</h2>
+          <h2 className="text-xl font-bold">{order ? 'Edit Order' : 'Add Order'}</h2>
           <button onClick={onClose} className="text-2xl">&times;</button>
         </div>
 
@@ -124,7 +118,7 @@ const Modal = ({ isOpen, onClose, order, onSave }) => {
               type="submit"
               className="px-4 py-2 bg-pink-500 text-white rounded-md"
             >
-              Save Changes
+              {order ? 'Save Changes' : 'Add Order'}
             </button>
           </div>
         </form>
