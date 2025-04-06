@@ -19,6 +19,8 @@ html, body, #root {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
 a {
@@ -32,6 +34,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #ffffff; 
+  color: #213547; 
 }
 
 h1 {
@@ -59,5 +63,22 @@ button:focus-visible {
   :root {
     color: #213547;
     background-color: #ffffff;
+  }
+
+  body {
+    background-color: #ffffff; 
+    color: #213547; 
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: rgba(255, 255, 255, 0.87); 
+    background-color: #121212; 
+  }
+
+  body {
+    background-color: #121212; 
+    color: rgba(255, 255, 255, 0.87); 
   }
 }

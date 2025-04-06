@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
 
-const DataTable = ({ data, loading }) => {
+const DataTable = ({ data, loading, setOrders, setStats }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -22,11 +22,48 @@ const DataTable = ({ data, loading }) => {
     setModalOpen(false);
   };
   
-  const handleSave = (updatedOrder) => {
-    console.log('Saving updated order:', updatedOrder);
-    closeModal();
+  const handleSave = async (updatedOrder) => {
+    try {
+      const response = await fetch(`https://67ec9394aa794fb3222e224b.mockapi.io/report/${updatedOrder.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedOrder),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to update order");
+      }
+  
+      const updatedData = await response.json();
+  
+      const updatedOrders = data.map((order) =>
+        order.id === updatedData.id ? { ...order, ...updatedData } : order
+      );
+  
+      setOrders(updatedOrders);
+  
+      const totalTurnover = updatedOrders.reduce(
+        (sum, item) => sum + (parseFloat(item.orderValue) || 0),
+        0
+      );
+      const totalProfit = totalTurnover * 0.35;
+  
+      setStats({
+        turnover: { value: totalTurnover, change: 5.33 },
+        profit: { value: totalProfit, change: 3.21 },
+        newCustomers: { value: updatedOrders.length, change: 6.84 },
+      });
+  
+      closeModal();
+    } catch (error) {
+      console.error("Error updating order:", error);
+      alert('Failed to update order');
+    }
   };
   
+
   const getStatusClass = (status) => {
     switch(status) {
       case 'New':

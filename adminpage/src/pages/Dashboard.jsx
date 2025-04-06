@@ -46,8 +46,9 @@ const Dashboard = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    fetchData(); 
+
+  }, []); 
 
   return (
     <div className="p-6">
@@ -83,6 +84,9 @@ const Dashboard = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Detailed report</h2>
           <div className="flex gap-2">
+          <button className="flex items-center px-4 py-2 bg-white border border-gray-200 rounded">
+              <span className="mr-2">➕</span> Add
+            </button>
             <button className="flex items-center px-4 py-2 bg-white border border-gray-200 rounded">
               <span className="mr-2">⬆️</span> Import
             </button>
@@ -91,7 +95,7 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        <DataTable data={orders} loading={loading} />
+        <DataTable data={orders} loading={loading} setOrders={setOrders} setStats={setStats}/>
       </section>
     </div>
   );

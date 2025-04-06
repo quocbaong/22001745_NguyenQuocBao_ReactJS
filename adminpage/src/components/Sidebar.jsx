@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import img from '../assets/3_Data/Selection_Sidebar.jpg'
+import imgLogo from '../assets/3_Data/Logo.jpg'
+
 
 const Sidebar = () => {
   return (
     <div className="w-56 bg-white border-r border-gray-200 flex flex-col h-screen">
       <div className="px-5 py-4">
         <div className="text-pink-500 font-bold text-xl flex items-center gap-2">
-          <span className="text-xl">🎨</span> Logo
+          <img src={imgLogo} alt="" />
         </div>
       </div>
       
