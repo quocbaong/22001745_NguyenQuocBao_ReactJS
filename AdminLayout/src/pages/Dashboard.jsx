@@ -56,7 +56,7 @@ const Dashboard = () => {
                     </div>
 
                     <div className="flex gap-2">
-                        <button className="flex items-center px-4 py-2 bg-white border rounded text-pink-500 border-pink-500">
+                        <button className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500">
                             <span className="mr-2">➕</span> Add
                         </button>
                         <button className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500 ">
