@@ -7,6 +7,7 @@ import imgQuestion from "../assets/3_Data/Lab_05/Question 1.png";
 import imgDow from "../assets/3_Data/Lab_05/Download.png";
 import imgImport from "../assets/3_Data/Lab_05/Move up.png";
 import impDetail from "../assets/3_Data/Lab_05/File text 1.png";
+import DataTable from "../components/DataTable";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -16,6 +17,7 @@ const Dashboard = () => {
   });
 
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
@@ -115,6 +117,12 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
+        <DataTable
+          data={orders}
+          loading={loading}
+          setOrders={setOrders}
+          setStats={setStats}
+        />
       </section>
     </div>
   );

@@ -36,35 +36,11 @@ const DataTable = ({ data, loading, setOrders, setStats }) => {
                 {currentRows.map((order) => (
                   <tr key={order.id} className="border-b">
                     <td className="px-4 py-3">
-                      <input type="checkbox" className="rounded" />
+
                     </td>
+                    
                     <td className="px-4 py-3">
-                      <div className="flex items-center">
-                        <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
-                          <img 
-                            src={order.avatar || '/path/to/default-avatar.jpg'} 
-                            alt={order.customerName || 'No Name'} 
-                            className="w-full h-full object-cover" 
-                          />
-                        </div>
-                        <span>{order.customerName || 'Unknown Customer'}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">{order.company}</td>
-                    <td className="px-4 py-3">${order.orderValue}</td>
-                    <td className="px-4 py-3">{new Date(order.oderDate * 1000).toLocaleDateString()}</td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-1 rounded-md text-xs font-medium ${getStatusClass(order.status)}`}>
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <button 
-                        onClick={() => openModal(order)}
-                        className="text-gray-500 hover:text-gray-700"
-                      >
-                        ✏️
-                      </button>
+                      
                     </td>
                   </tr>
                 ))}
