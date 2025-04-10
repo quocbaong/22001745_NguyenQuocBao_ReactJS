@@ -127,7 +127,7 @@ const DataTable = ({ data, loading, setOrders, setStats }) => {
                         <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
                           <img
                             src={order.avatar || "/path/to/default-avatar.jpg"}
-                            alt={order.customerName || "No Name"}
+                            alt={order.customerName || "No Name"} 
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -136,9 +136,8 @@ const DataTable = ({ data, loading, setOrders, setStats }) => {
                     </td>
                     <td className="px-4 py-3">{order.company}</td>
                     <td className="px-4 py-3">${order.orderValue}</td>
-                    <td className="px-4 py-3">
-                      {new Date(order.oderDate * 1000).toLocaleDateString()}
-                    </td>
+                    <td className="px-4 py-3">{order.oderDate}</td>
+
                     <td className="px-4 py-3">
                       <span
                         className={`px-2 py-1 rounded-md text-xs font-medium ${getStatusClass(

@@ -67,11 +67,18 @@ const Dashboard = () => {
 
       const savedOrder = await response.json();
 
+      const savedWithDateObj = {
+        ...savedOrder,
+        oderDateObj: new Date(`1 ${savedOrder.oderDate} 2023`),
+      };
+
       const updatedOrders = newOrder.id
         ? orders.map((order) =>
-            order.id === savedOrder.id ? { ...order, ...savedOrder } : order
+            order.id === savedWithDateObj.id
+              ? { ...order, ...savedWithDateObj }
+              : order
           )
-        : [...orders, savedOrder];
+        : [...orders, savedWithDateObj];
 
       setOrders(updatedOrders);
 
@@ -109,15 +116,21 @@ const Dashboard = () => {
         }
 
         const data = await response.json();
-        setOrders(data);
 
-        const totalTurnover = data.reduce(
+        const parsedData = data.map((item) => ({
+          ...item,
+          oderDateObj: new Date(`1 ${item.oderDate} 2023`),
+        }));
+
+        setOrders(parsedData);
+
+        const totalTurnover = parsedData.reduce(
           (sum, item) => sum + (parseFloat(item.orderValue) || 0),
           0
         );
         const profit = totalTurnover * 0.35;
 
-        const newCustomersCount = data.filter(
+        const newCustomersCount = parsedData.filter(
           (item) => item.status === "New"
         ).length;
 
@@ -133,7 +146,6 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -177,18 +189,23 @@ const Dashboard = () => {
           </div>
 
           <div className="flex gap-2">
-            <button onClick={openAddModal} className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500">
+            <button
+              onClick={openAddModal}
+              className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500"
+            >
               <span className="mr-2">➕</span> Add
             </button>
             <button className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500 ">
               <span className="mr-2">
                 <img src={imgImport} alt="" />
-              </span>Import
+              </span>
+              Import
             </button>
             <button className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500">
               <span className="mr-2">
                 <img src={imgDow} alt="" />
-              </span>Export
+              </span>
+              Export
             </button>
           </div>
         </div>
