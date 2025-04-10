@@ -8,6 +8,7 @@ import imgDow from "../assets/3_Data/Lab_05/Download.png";
 import imgImport from "../assets/3_Data/Lab_05/Move up.png";
 import impDetail from "../assets/3_Data/Lab_05/File text 1.png";
 import DataTable from "../components/DataTable";
+import Modal from "../components/Modal";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -18,6 +19,23 @@ const Dashboard = () => {
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const openAddModal = () => {
+    setSelectedOrder(null);
+    setModalOpen(true);
+  };
+
+  const openEditModal = (order) => {
+    setSelectedOrder(order);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
 
 
   useEffect(() => {
@@ -124,6 +142,11 @@ const Dashboard = () => {
           setStats={setStats}
         />
       </section>
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        order={selectedOrder}
+      />
     </div>
   );
 };
