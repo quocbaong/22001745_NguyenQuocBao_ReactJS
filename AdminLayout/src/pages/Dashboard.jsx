@@ -36,7 +36,66 @@ const Dashboard = () => {
     setModalOpen(false);
   };
 
+  const handleSave = async (newOrder) => {
+    try {
+      let response;
+      if (newOrder.id) {
+        response = await fetch(
+          `https://67ec9394aa794fb3222e224b.mockapi.io/report/${newOrder.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newOrder),
+          }
+        );
+      } else {
+        response = await fetch(
+          "https://67ec9394aa794fb3222e224b.mockapi.io/report",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newOrder),
+          }
+        );
+      }
 
+      if (!response.ok) throw new Error("Failed to save order");
+
+      const savedOrder = await response.json();
+
+      const updatedOrders = newOrder.id
+        ? orders.map((order) =>
+            order.id === savedOrder.id ? { ...order, ...savedOrder } : order
+          )
+        : [...orders, savedOrder];
+
+      setOrders(updatedOrders);
+
+      const totalTurnover = updatedOrders.reduce(
+        (sum, item) => sum + (parseFloat(item.orderValue) || 0),
+        0
+      );
+      const totalProfit = totalTurnover * 0.35;
+
+      setStats({
+        turnover: { value: totalTurnover, change: 5.33 },
+        profit: { value: totalProfit, change: 3.21 },
+        newCustomers: {
+          value: updatedOrders.filter((order) => order.status === "New").length,
+          change: 6.84,
+        },
+      });
+
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Error saving order:", error);
+      alert("Failed to save order");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -118,20 +177,18 @@ const Dashboard = () => {
           </div>
 
           <div className="flex gap-2">
-            <button className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500">
+            <button onClick={openAddModal} className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500">
               <span className="mr-2">➕</span> Add
             </button>
             <button className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500 ">
               <span className="mr-2">
                 <img src={imgImport} alt="" />
-              </span>{" "}
-              Import
+              </span>Import
             </button>
             <button className="flex items-center px-4 py-2 bg-white border border-pink-500 rounded text-pink-500">
               <span className="mr-2">
                 <img src={imgDow} alt="" />
-              </span>{" "}
-              Export
+              </span>Export
             </button>
           </div>
         </div>
@@ -146,6 +203,7 @@ const Dashboard = () => {
         isOpen={modalOpen}
         onClose={closeModal}
         order={selectedOrder}
+        onSave={handleSave}
       />
     </div>
   );
