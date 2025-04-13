@@ -40,6 +40,7 @@ function Datatable({ customers, loading }) {
     }
   };
 
+  // Generate pagination numbers
   const getPaginationNumbers = () => {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -65,8 +66,8 @@ function Datatable({ customers, loading }) {
   };
 
   return (
-    <section className="mt-8">
-      <div className="flex justify-between items-center mb-6">
+    <section className="mt-4">
+      <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold flex items-center text-gray-800">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -123,92 +124,96 @@ function Datatable({ customers, loading }) {
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="w-12 p-4">
-                <input type="checkbox" className="rounded border-gray-300" />
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Customer Name
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Company
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Order Value
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Order Date
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="7" className="text-center py-4">Loading...</td>
-              </tr>
-            ) : displayedCustomers.length === 0 ? (
-              <tr>
-                <td colSpan="7" className="text-center py-4">No data available</td>
-              </tr>
-            ) : (
-              displayedCustomers.map((customer) => (
-                <tr
-                  key={customer.id}
-                  className="border-b border-gray-200 hover:bg-gray-50"
-                >
-                  <td className="p-4">
+        <div className="overflow-x-auto">
+          <div className="max-h-105 overflow-y-auto relative">
+            <table className="w-full">
+              <thead className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="w-12 p-4 bg-gray-50">
                     <input type="checkbox" className="rounded border-gray-300" />
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden mr-3">
-                        <img
-                          src={customer.avatar || `/api/placeholder/${customer.id}/80`}
-                          alt={customer.name}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                      <span className="font-medium text-gray-900">
-                        {customer.name}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-gray-600">
-                    {customer.company}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap font-medium text-gray-900">
-                    {customer.value}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-gray-600">
-                    {customer.date}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClasses(
-                        customer.status
-                      )}`}
-                    >
-                      {customer.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap">
-                    <button className="text-gray-400 hover:text-blue-500">
-                      <Edit size={18} />
-                    </button>
-                  </td>
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                    Customer Name
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                    Company
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                    Order Value
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                    Order Date
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                    Actions
+                  </th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody className="min-h-full"> 
+                {loading ? (
+                  <tr>
+                    <td colSpan="7" className="text-center py-4">Loading...</td>
+                  </tr>
+                ) : displayedCustomers.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" className="text-center py-4">No data available</td>
+                  </tr>
+                ) : (
+                  displayedCustomers.map((customer) => (
+                    <tr
+                      key={customer.id}
+                      className="border-b border-gray-200 hover:bg-gray-50"
+                    >
+                      <td className="p-4">
+                        <input type="checkbox" className="rounded border-gray-300" />
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden mr-3">
+                            <img
+                              src={customer.avatar || `/api/placeholder/${customer.id}/80`}
+                              alt={customer.name}
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <span className="font-medium text-gray-900">
+                            {customer.name}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-gray-600">
+                        {customer.company}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap font-medium text-gray-900">
+                        {customer.value}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-gray-600">
+                        {customer.date}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClasses(
+                            customer.status
+                          )}`}
+                        >
+                          {customer.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <button className="text-gray-400 hover:text-blue-500">
+                          <Edit size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
         <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
           <div className="text-sm text-gray-500">{customers.length} results</div>

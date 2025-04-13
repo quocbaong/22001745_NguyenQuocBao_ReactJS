@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
 import Overview from "../components/Overview";
 import Datatable from "../components/Datatable";
 import { Search } from "lucide-react";
@@ -44,9 +43,8 @@ function Dashboard() {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar />
-      <div className="flex-1 overflow-auto">
-        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <div className="flex-1 flex flex-col">
+        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
           <h1 className="text-2xl font-bold text-pink-600">Dashboard</h1>
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -76,9 +74,16 @@ function Dashboard() {
           </div>
         </header>
 
-        <div className="p-6">
-          <Overview customers={customers} orders={orders} />
-          <Datatable customers={customers} loading={loading} />
+        <div className="bg-white border-b border-gray-200 sticky top-16 z-10">
+          <div className="px-6 py-4">
+            <Overview customers={customers} orders={orders} />
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-auto">
+          <div className="p-1">
+            <Datatable customers={customers} loading={loading} />
+          </div>
         </div>
       </div>
     </div>
