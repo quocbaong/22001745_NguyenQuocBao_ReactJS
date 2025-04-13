@@ -1,31 +1,35 @@
 import { ShoppingCart, DollarSign, User } from 'lucide-react';
 
-function Overview() {
+function Overview({ customers = [], orders = [] }) {
+  const turnover = orders.reduce((total, order) => total + order.amount, 0); 
+  const profit = turnover * 0.35; 
+  const newCustomerCount = customers.filter(c => c.status && c.status.toLowerCase().includes('new')).length;
+
   const statCards = [
     {
       title: 'Turnover',
-      value: '$92,405',
+      value: `$${turnover.toLocaleString()}`,
       changePercentage: '5.39',
       bgColor: 'bg-pink-50',
       icon: <ShoppingCart size={20} />,
-      iconColor: 'text-pink-500'
+      iconColor: 'text-pink-500',
     },
     {
       title: 'Profit',
-      value: '$32,218',
-      changePercentage: '5.39',
+      value: `$${profit.toLocaleString()}`,
+      changePercentage: '3.12',
       bgColor: 'bg-blue-50',
       icon: <DollarSign size={20} />,
-      iconColor: 'text-blue-500'
+      iconColor: 'text-blue-500',
     },
     {
       title: 'New customer',
-      value: '298',
+      value: newCustomerCount.toString(),
       changePercentage: '6.84',
       bgColor: 'bg-green-50',
       icon: <User size={20} />,
-      iconColor: 'text-blue-500'
-    }
+      iconColor: 'text-green-500',
+    },
   ];
 
   return (
@@ -36,7 +40,7 @@ function Overview() {
         </svg>
         Overview
       </h2>
-      
+
       <div className="grid grid-cols-3 gap-6">
         {statCards.map((stat, index) => (
           <div key={index} className={`${stat.bgColor} rounded-lg p-6 relative`}>

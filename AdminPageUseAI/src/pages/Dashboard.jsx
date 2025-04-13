@@ -1,21 +1,46 @@
-import { useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import Overview from '../components/Overview';
-import Datatable from '../components/Datatable';
-import { Search } from 'lucide-react';
-import imgMessage from '../assets/3_Data/Lab_05/Bell 1.png'
-import imgMQuestion from '../assets/3_Data/Lab_05/Question 1.png'
-import imgAvatar from '../assets/3_Data/Lab_05/Avatar (1).png'
+import { useEffect, useState } from "react";
+import Sidebar from "../components/Sidebar";
+import Overview from "../components/Overview";
+import Datatable from "../components/Datatable";
+import { Search } from "lucide-react";
+import imgMessage from "../assets/3_Data/Lab_05/Bell 1.png";
+import imgMQuestion from "../assets/3_Data/Lab_05/Question 1.png";
+import imgAvatar from "../assets/3_Data/Lab_05/Avatar (1).png";
 
 function Dashboard() {
-  const [customers] = useState([
-    { id: 1, name: 'Elizabeth Lee', company: 'AvatarSystems', value: '$359', date: '10/07/2023', status: 'New' },
-    { id: 2, name: 'Carlos Garcia', company: 'SmoozeShift', value: '$747', date: '24/07/2023', status: 'New' },
-    { id: 3, name: 'Elizabeth Bailey', company: 'Prime Time Telecom', value: '$564', date: '08/08/2023', status: 'In-progress' },
-    { id: 4, name: 'Ryan Brown', company: 'OmniTech Corporation', value: '$541', date: '31/08/2023', status: 'In-progress' },
-    { id: 5, name: 'Ryan Young', company: 'DataStream Inc.', value: '$769', date: '01/05/2023', status: 'Completed' },
-    { id: 6, name: 'Hailey Adams', company: 'FlowRush', value: '$922', date: '10/06/2023', status: 'Completed' },
-  ]);
+  const [customers, setCustomers] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("https://67ec9394aa794fb3222e224b.mockapi.io/report")
+      .then((res) => res.json())
+      .then((data) => {
+        const formattedCustomers = data.map((item) => ({
+          id: item.id,
+          name: item.customerName,
+          company: item.company,
+          value: `$${parseInt(item.orderValue).toLocaleString()}`,
+          date: item.oderDate,
+          status: item.status,
+          avatar: item.avatar,
+        }));
+
+        const formattedOrders = data.map((item) => ({
+          id: item.id,
+          amount: parseInt(item.orderValue), 
+        }));
+
+        setCustomers(formattedCustomers);
+        setOrders(formattedOrders);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -25,7 +50,10 @@ function Dashboard() {
           <h1 className="text-2xl font-bold text-pink-600">Dashboard</h1>
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={18}
+              />
               <input
                 type="text"
                 placeholder="Search..."
@@ -39,14 +67,18 @@ function Dashboard() {
               <img src={imgMQuestion} alt="" />
             </button>
             <div className="h-8 w-8 bg-pink-100 rounded-full overflow-hidden">
-              <img src={imgAvatar} alt="User avatar" className="h-full w-full object-cover" />
+              <img
+                src={imgAvatar}
+                alt="User avatar"
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
         </header>
-        
+
         <div className="p-6">
-          <Overview />
-          <Datatable customers={customers} />
+          <Overview customers={customers} orders={orders} />
+          <Datatable customers={customers} loading={loading} />
         </div>
       </div>
     </div>
