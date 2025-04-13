@@ -1,8 +1,8 @@
 import { ShoppingCart, DollarSign, User } from 'lucide-react';
 
 function Overview({ customers = [], orders = [] }) {
-  const turnover = orders.reduce((total, order) => total + order.amount, 0); 
-  const profit = turnover * 0.35; 
+  const turnover = orders.reduce((total, order) => total + (order.amount || 0), 0);
+  const profit = turnover * 0.35;
   const newCustomerCount = customers.filter(c => c.status && c.status.toLowerCase().includes('new')).length;
 
   const statCards = [

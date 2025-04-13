@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Edit } from "lucide-react";
+import Modal from "./Modal";
 
-function Datatable({ customers, loading }) {
+function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
-  const totalPages = Math.ceil(customers.length / itemsPerPage);
+  const totalPages = Math.ceil(initialCustomers.length / itemsPerPage);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentCustomer, setCurrentCustomer] = useState(null);
 
   useEffect(() => {
-    if (customers.length > 0) {
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      setDisplayedCustomers(customers.slice(startIndex, endIndex));
-    }
-  }, [customers, currentPage]);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setDisplayedCustomers(initialCustomers.slice(startIndex, endIndex));
+  }, [initialCustomers, currentPage]);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
@@ -25,7 +26,6 @@ function Datatable({ customers, loading }) {
     if (status && status.toLowerCase().includes("new")) {
       return "text-blue-500 bg-blue-100";
     }
-    
     switch (status) {
       case "In-progress":
       case "status 2":
@@ -40,7 +40,6 @@ function Datatable({ customers, loading }) {
     }
   };
 
-  // Generate pagination numbers
   const getPaginationNumbers = () => {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -65,8 +64,25 @@ function Datatable({ customers, loading }) {
     ];
   };
 
+  const openEditModal = (customer) => {
+    setCurrentCustomer(customer);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCurrentCustomer(null);
+  };
+
+  const handleSave = (updatedData) => {
+    if (onCustomerUpdate) {
+      onCustomerUpdate(updatedData);
+    }
+    closeModal();
+  };
+
   return (
-    <section className="mt-4">
+    <section className="mt-4 relative">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold flex items-center text-gray-800">
           <svg
@@ -83,7 +99,7 @@ function Datatable({ customers, loading }) {
               d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          Detailed report
+          Detailed Report
         </h2>
         <div className="flex items-center space-x-2">
           <button className="flex items-center px-4 py-2 border border-pink-200 text-pink-500 rounded-lg hover:bg-pink-50">
@@ -125,7 +141,7 @@ function Datatable({ customers, loading }) {
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <div className="max-h-105 overflow-y-auto relative">
+          <div className="max-h-128 overflow-y-auto relative">
             <table className="w-full">
               <thead className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200">
                 <tr>
@@ -152,7 +168,7 @@ function Datatable({ customers, loading }) {
                   </th>
                 </tr>
               </thead>
-              <tbody className="min-h-full"> 
+              <tbody className="min-h-full">
                 {loading ? (
                   <tr>
                     <td colSpan="7" className="text-center py-4">Loading...</td>
@@ -177,6 +193,10 @@ function Datatable({ customers, loading }) {
                               src={customer.avatar || `/api/placeholder/${customer.id}/80`}
                               alt={customer.name}
                               className="h-full w-full object-cover"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `/api/placeholder/${customer.id}/80`;
+                              }}
                             />
                           </div>
                           <span className="font-medium text-gray-900">
@@ -203,7 +223,10 @@ function Datatable({ customers, loading }) {
                         </span>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
-                        <button className="text-gray-400 hover:text-blue-500">
+                        <button 
+                          className="text-gray-400 hover:text-blue-500"
+                          onClick={() => openEditModal(customer)}
+                        >
                           <Edit size={18} />
                         </button>
                       </td>
@@ -216,12 +239,12 @@ function Datatable({ customers, loading }) {
         </div>
 
         <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
-          <div className="text-sm text-gray-500">{customers.length} results</div>
+          <div className="text-sm text-gray-500">{initialCustomers.length} results</div>
           <div className="flex items-center space-x-1">
             <button 
               onClick={() => handlePageChange(currentPage - 1)} 
               disabled={currentPage === 1}
-              className={`p-2 rounded ${currentPage === 1 ? 'text-gray-300' : 'hover:bg-gray-200 text-gray-500'}`}
+              className={`p-2 rounded ${currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200 text-gray-500'}`}
             >
               <ChevronLeft size={18} />
             </button>
@@ -234,9 +257,10 @@ function Datatable({ customers, loading }) {
                   currentPage === page
                     ? "bg-pink-500 text-white"
                     : page === "..."
-                    ? "text-gray-600"
+                    ? "text-gray-600 cursor-default"
                     : "hover:bg-gray-200 text-gray-600"
                 }`}
+                disabled={page === "..."}
               >
                 {page}
               </button>
@@ -245,13 +269,21 @@ function Datatable({ customers, loading }) {
             <button 
               onClick={() => handlePageChange(currentPage + 1)} 
               disabled={currentPage === totalPages}
-              className={`p-2 rounded ${currentPage === totalPages ? 'text-gray-300' : 'hover:bg-gray-200 text-gray-500'}`}
+              className={`p-2 rounded ${currentPage === totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200 text-gray-500'}`}
             >
               <ChevronRight size={18} />
             </button>
           </div>
         </div>
       </div>
+
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+        customer={currentCustomer} 
+        onSave={handleSave} 
+        title="Edit Customer Information"
+      />
     </section>
   );
 }
