@@ -42,7 +42,7 @@ function Sidebar() {
         ))}
       </nav>
       
-      <div className="mt-50 p-4">
+      <div className="mt-10 p-4">
         <div className="bg-blue-50 p-4 rounded-lg">
           <div className="flex justify-center ">
             <img src={imgGroup} alt="Dashboard illustration" className="h-32" />
