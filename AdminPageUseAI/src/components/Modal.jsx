@@ -6,41 +6,58 @@ function Modal({ isOpen, onClose, customer, onSave, title }) {
     name: "",
     company: "",
     value: "",
-    date: "",
-    status: ""
+    date: "January",
+    status: "New"
   });
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   useEffect(() => {
     if (customer) {
       setEditForm({
         name: customer.name || "",
         company: customer.company || "",
-        value: customer.value ? parseFloat(customer.value.replace('$', '').replace(',', '')) || "" : "",
-        date: customer.date || "",
-        status: customer.status || ""
+        value: customer.value ? customer.value.replace('$', '').replace(',', '') : "",
+        date: customer.date || "January", 
+        status: customer.status || "New"
+      });
+    } else {
+      setEditForm({
+        name: "",
+        company: "",
+        value: "",
+        date: "January", 
+        status: "New"
       });
     }
   }, [customer]);
 
-  const statusOptions = [
-    "New",
-    "In-progress",
-    "Completed"
-  ];
+  const statusOptions = ["New", "In-progress", "Completed"];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditForm({
-      ...editForm,
+    setEditForm(prev => ({
+      ...prev,
       [name]: value
-    });
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedValue = `${parseFloat(editForm.value || 0)}`; // No commas, just number
-    onSave({ ...editForm, value: updatedValue, id: customer.id });
-    onClose();
+    const dataToSave = {
+      ...editForm,
+      value: editForm.value.toString(),
+      id: customer ? customer.id : undefined,
+      avatar: customer ? customer.avatar : ""
+    };
+    
+    const success = await onSave(dataToSave);
+    if (success) {
+      onClose();
+    }
   };
 
   if (!isOpen) return null;
@@ -92,20 +109,26 @@ function Modal({ isOpen, onClose, customer, onSave, title }) {
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
               required
-              step="any" 
+              min="0"
+              step="0.01"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Order Date</label>
-            <input
-              type="text"
+            <label className="block text-sm font-medium text-gray-700 mb-1">Order Month</label>
+            <select
               name="date"
               value={editForm.date}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
               required
-            />
+            >
+              {months.map((month) => (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="mb-4">
@@ -139,7 +162,7 @@ function Modal({ isOpen, onClose, customer, onSave, title }) {
             type="submit"
             className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600"
           >
-            Save Changes
+            {customer ? "Save Changes" : "Add Customer"}
           </button>
         </div>
       </div>

@@ -14,6 +14,7 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     setDisplayedCustomers(initialCustomers.slice(startIndex, endIndex));
+    console.log("Datatable updated with displayed customers:", displayedCustomers);
   }, [initialCustomers, currentPage]);
 
   const handlePageChange = (pageNumber) => {
@@ -50,7 +51,15 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
     }
 
     if (currentPage >= totalPages - 2) {
-      return [1, 2, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+      return [
+        1,
+        2,
+        "...",
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
     }
 
     return [
@@ -69,12 +78,18 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
     setIsModalOpen(true);
   };
 
+  const openAddModal = () => {
+    setCurrentCustomer(null);
+    setIsModalOpen(true);
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentCustomer(null);
   };
 
   const handleSave = (updatedData) => {
+    console.log("handleSave in Datatable called with:", updatedData);
     if (onCustomerUpdate) {
       onCustomerUpdate(updatedData);
     }
@@ -102,7 +117,24 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
           Detailed Report
         </h2>
         <div className="flex items-center space-x-2">
-          <button className="flex items-center px-4 py-2 border border-pink-200 text-pink-500 rounded-lg hover:bg-pink-50">
+          <button className="flex items-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg hover:bg-pink-50 transition-colors duration-200" onClick={openAddModal}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Add
+          </button>
+          <button className="flex items-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg hover:bg-pink-50">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-2"
@@ -119,7 +151,7 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
             </svg>
             Import
           </button>
-          <button className="flex items-center px-4 py-2 border border-pink-200 text-pink-500 rounded-lg hover:bg-pink-50">
+          <button className="flex items-center px-4 py-2 border border-pink-500 text-pink-500 rounded-lg hover:bg-pink-50">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-2"
@@ -146,7 +178,10 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
               <thead className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="w-12 p-4 bg-gray-50">
-                    <input type="checkbox" className="rounded border-gray-300" />
+                    <input
+                      type="checkbox"
+                      className="rounded border-gray-300"
+                    />
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
                     Customer Name
@@ -158,7 +193,7 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
                     Order Value
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
-                    Order Date
+                    Order Month
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
                     Status
@@ -171,11 +206,15 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
               <tbody className="min-h-full">
                 {loading ? (
                   <tr>
-                    <td colSpan="7" className="text-center py-4">Loading...</td>
+                    <td colSpan="7" className="text-center py-4">
+                      Loading...
+                    </td>
                   </tr>
                 ) : displayedCustomers.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center py-4">No data available</td>
+                    <td colSpan="7" className="text-center py-4">
+                      No data available
+                    </td>
                   </tr>
                 ) : (
                   displayedCustomers.map((customer) => (
@@ -184,13 +223,19 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
                       className="border-b border-gray-200 hover:bg-gray-50"
                     >
                       <td className="p-4">
-                        <input type="checkbox" className="rounded border-gray-300" />
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300"
+                        />
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden mr-3">
                             <img
-                              src={customer.avatar || `/api/placeholder/${customer.id}/80`}
+                              src={
+                                customer.avatar ||
+                                `/api/placeholder/${customer.id}/80`
+                              }
                               alt={customer.name}
                               className="h-full w-full object-cover"
                               onError={(e) => {
@@ -223,7 +268,7 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
                         </span>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
-                        <button 
+                        <button
                           className="text-gray-400 hover:text-blue-500"
                           onClick={() => openEditModal(customer)}
                         >
@@ -239,12 +284,18 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
         </div>
 
         <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
-          <div className="text-sm text-gray-500">{initialCustomers.length} results</div>
+          <div className="text-sm text-gray-500">
+            {initialCustomers.length} results
+          </div>
           <div className="flex items-center space-x-1">
-            <button 
-              onClick={() => handlePageChange(currentPage - 1)} 
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`p-2 rounded ${currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200 text-gray-500'}`}
+              className={`p-2 rounded ${
+                currentPage === 1
+                  ? "text-gray-300 cursor-not-allowed"
+                  : "hover:bg-gray-200 text-gray-500"
+              }`}
             >
               <ChevronLeft size={18} />
             </button>
@@ -252,7 +303,9 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
             {getPaginationNumbers().map((page, index) => (
               <button
                 key={index}
-                onClick={() => typeof page === 'number' ? handlePageChange(page) : null}
+                onClick={() =>
+                  typeof page === "number" ? handlePageChange(page) : null
+                }
                 className={`w-8 h-8 flex items-center justify-center rounded ${
                   currentPage === page
                     ? "bg-pink-500 text-white"
@@ -266,10 +319,14 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
               </button>
             ))}
 
-            <button 
-              onClick={() => handlePageChange(currentPage + 1)} 
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className={`p-2 rounded ${currentPage === totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200 text-gray-500'}`}
+              className={`p-2 rounded ${
+                currentPage === totalPages
+                  ? "text-gray-300 cursor-not-allowed"
+                  : "hover:bg-gray-200 text-gray-500"
+              }`}
             >
               <ChevronRight size={18} />
             </button>
@@ -277,12 +334,12 @@ function Datatable({ customers: initialCustomers, loading, onCustomerUpdate }) {
         </div>
       </div>
 
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={closeModal} 
-        customer={currentCustomer} 
-        onSave={handleSave} 
-        title="Edit Customer Information"
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        customer={currentCustomer}
+        onSave={handleSave}
+        title={currentCustomer ? "Edit Customer Information" : "Add New Customer"}
       />
     </section>
   );
