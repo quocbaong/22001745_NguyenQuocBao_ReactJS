@@ -8,6 +8,7 @@ import UserList from './components/UserList';
 import AdvancedCounter from './components/AdvancedCounter';
 import BMICalculator from './components/BMICalculator';
 import EventManagement from './components/EventManagement';
+import ThemePage from './components/ThemePage';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Counter />} />
           <Route path="/todo" element={<TodoList />}/>
-          {/* <Route path="/theme" element={<ThemeToggle />} /> */}
+          <Route path="/theme" element={<ThemePage />} />
           <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/users" element={<UserList />} />

@@ -7,6 +7,7 @@ import userReducer from '../features/userSlice';
 import advancedCounterReducer from '../features/advancedCounterSlice';
 import bmiReducer from '../features/bmiSlice';
 import eventReducer from '../features/eventSlice';
+import themeReducer from '../features/themeSlice';
 
 export default configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export default configureStore({
     advancedCounter: advancedCounterReducer,
     bmi: bmiReducer,
     event: eventReducer,
+    theme: themeReducer,
   },
 });

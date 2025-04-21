@@ -17,6 +17,9 @@ Cau 1. Couter App
 Cau2. To-do List App
 ![image](https://github.com/user-attachments/assets/8c11fc24-5c88-422c-9c8c-ac70d422236a)
 
+Cau3. Theme
+![alt text](image-7.png)
+![alt text](image-8.png)
 Cau4. Shopping Cart
 ![alt text](image.png)
 
