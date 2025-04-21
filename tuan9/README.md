@@ -29,3 +29,6 @@ Cau6. User List
 
 Cau7. Counter nang cao
 ![alt text](image-4.png)
+
+Cau8. Tinh BMI
+![alt text](image-5.png)
