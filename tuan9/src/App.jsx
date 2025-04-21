@@ -7,6 +7,7 @@ import Auth from './components/Auth';
 import UserList from './components/UserList';
 import AdvancedCounter from './components/AdvancedCounter';
 import BMICalculator from './components/BMICalculator';
+import EventManagement from './components/EventManagement';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
           <Route path="/users" element={<UserList />} />
           <Route path="/advanced-counter" element={<AdvancedCounter />} />
           <Route path="/bmi" element={<BMICalculator />} />
-          {/* <Route path="/events" element={<EventManagement />} /> */}
+          <Route path="/events" element={<EventManagement />} />
         </Routes>
       </div>
     </div>

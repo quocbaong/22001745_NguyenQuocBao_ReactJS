@@ -32,3 +32,6 @@ Cau7. Counter nang cao
 
 Cau8. Tinh BMI
 ![alt text](image-5.png)
+
+Cau9. Event Management
+![alt text](image-6.png)
