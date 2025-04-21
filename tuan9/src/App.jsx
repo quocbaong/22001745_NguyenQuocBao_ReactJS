@@ -1,22 +1,24 @@
-import React from 'react';
-import CounterApp from './components/CounterApp';
-import TodoList from './components/TodoList';
-import ThemeToggle from './components/ThemeToggle';
-import ShoppingCart from './components/ShoppingCart';
-import AuthApp from './components/AuthApp';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Counter from './components/Counter';
 
 function App() {
   return (
-    <div>
-      <CounterApp />
-      <hr />
-      <TodoList />
-      <hr />
-      <ThemeToggle />
-      <hr />
-      <ShoppingCart />
-      <hr />
-      <AuthApp />
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+      <Navbar />
+      <div className="container mx-auto p-4">
+        <Routes>
+          <Route path="/" element={<Counter />} />
+          {/* <Route path="/todo" element={<TodoList />} />
+          <Route path="/theme" element={<ThemeToggle />} />
+          <Route path="/cart" element={<ShoppingCart />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/advanced-counter" element={<AdvancedCounter />} />
+          <Route path="/bmi" element={<BMICalculator />} />
+          <Route path="/events" element={<EventManagement />} /> */}
+        </Routes>
+      </div>
     </div>
   );
 }
