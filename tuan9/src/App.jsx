@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Counter from './components/Counter';
+import TodoList from './components/TodoList';
 
 function App() {
   return (
@@ -9,8 +10,8 @@ function App() {
       <div className="container mx-auto p-4">
         <Routes>
           <Route path="/" element={<Counter />} />
-          {/* <Route path="/todo" element={<TodoList />} />
-          <Route path="/theme" element={<ThemeToggle />} />
+          <Route path="/todo" element={<TodoList />}/>
+          {/* <Route path="/theme" element={<ThemeToggle />} />
           <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/users" element={<UserList />} />
