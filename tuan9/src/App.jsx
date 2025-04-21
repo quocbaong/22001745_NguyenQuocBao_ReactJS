@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Counter from './components/Counter';
 import TodoList from './components/TodoList';
 import ShoppingCart from './components/ShoppingCart';
+import Auth from './components/Auth';
 
 function App() {
   return (
@@ -14,8 +15,8 @@ function App() {
           <Route path="/todo" element={<TodoList />}/>
           {/* <Route path="/theme" element={<ThemeToggle />} /> */}
           <Route path="/cart" element={<ShoppingCart />} />
-          {/* <Route path="/auth" element={<Auth />} />
-          <Route path="/users" element={<UserList />} />
+          <Route path="/auth" element={<Auth />} />
+          {/* <Route path="/users" element={<UserList />} />
           <Route path="/advanced-counter" element={<AdvancedCounter />} />
           <Route path="/bmi" element={<BMICalculator />} />
           <Route path="/events" element={<EventManagement />} /> */}
