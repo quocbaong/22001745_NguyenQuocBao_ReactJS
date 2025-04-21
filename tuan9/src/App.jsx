@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Counter from './components/Counter';
 import TodoList from './components/TodoList';
+import ShoppingCart from './components/ShoppingCart';
 
 function App() {
   return (
@@ -11,9 +12,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Counter />} />
           <Route path="/todo" element={<TodoList />}/>
-          {/* <Route path="/theme" element={<ThemeToggle />} />
+          {/* <Route path="/theme" element={<ThemeToggle />} /> */}
           <Route path="/cart" element={<ShoppingCart />} />
-          <Route path="/auth" element={<Auth />} />
+          {/* <Route path="/auth" element={<Auth />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/advanced-counter" element={<AdvancedCounter />} />
           <Route path="/bmi" element={<BMICalculator />} />
