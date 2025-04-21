@@ -26,3 +26,6 @@ Cau5. Auth
 
 Cau6. User List
 ![alt text](image-3.png)
+
+Cau7. Counter nang cao
+![alt text](image-4.png)
